@@ -100,7 +100,7 @@ async function fetchChannelDetails(channelId) {
           <img src="${combinedDetails.imageUrl}" alt="">
           <div>
               <p>${combinedDetails.channelName}</p>
-              <span>${combinedDetails.subscriberCount}</span>
+              <span>${combinedDetails.subscriberCount} Subscriber</span>
           </div>
           <button>Subscribe</button>
       </div>
