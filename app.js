@@ -8,7 +8,7 @@ const  videoConatiner=document.querySelector(".list-container");
 const  videoConatiner1=document.querySelector(".list-container1")
 
 
-const API_KEY = "AIzaSyCNFFtwfi-MQL3fEO4GaAVYxfQby8X-Qzc/";
+const API_KEY = "AIzaSyD4Hv7gZbNHjs0xfaewYsxPniXDXDbNecM";
 
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
 const channelList="https://www.googleapis.com/youtube/v3/channels?";
@@ -29,10 +29,13 @@ async function fetchVideos(searchQuery, maxResults) {
         `&maxResults=${maxResults}`
     );
     const data = await response.json();
-    console.log(data.items);
-    data.items.forEach(item => {
-        getChannelIcon(item);
-    });
+    //console.log(data.items);
+    for(let i=0;i<maxResults;i++){
+        getChannelIcon(data.items[i]);
+    }
+    // data.items.forEach(item => {
+    //     getChannelIcon(item);
+    // });
   } catch (e) {
     console.log(e);
   }
@@ -48,35 +51,125 @@ const getChannelIcon=(video_data)=>{
      .then(res=> res.json())
      .then(data=>{
         video_data.channelThumbnail=data.items[0].snippet.thumbnails.default.url;
-        console.log(video_data);
+        //console.log(video_data);
           makeVideoCard(video_data);
      })
 }
 
+
+
 const makeVideoCard = (data)=>{
-    videoConatiner.innerHTML +=`
-    <div class="vid-list" >
-    <a href=""><img src="${data.snippet.thumbnails.high.url}" class="thumbnail" alt=""></a>
+     const dur=  fetchVideoStats(data.id.videoId, 'statistics');
+     dur.then(function resolveDefi(duration) {
+        console.log(duration);
+        videoConatiner.innerHTML +=`
+       <div class="vid-list" >
+       <a href="play.html"><img src="${data.snippet.thumbnails.high.url}" class="thumbnail" alt=""></a>
     
     <div class="flex-div">
         <img src="${data.channelThumbnail}" alt="">
         <div class="vid-info">
-            <a href="">${data.snippet.title}</a>
-            <p>${data.snippet.channelTittle}</p>
-            <p>15K Views &bull; 2 Days</p>
-        </div>
+            <a href="play.html">${data.snippet.title}</a>
+            <p>${data.snippet.channelTitle}</p>
+            <p> ${duration} Views</p>
+            </div>
     </div>
 </div>
     `
+        //return data;
+    })
 }
+
+
+async function fetchVideoStats(videoId, typeOfDetails) {
+    try {
+      const response = await fetch(
+        BASE_URL +
+          "/videos" +
+          `?key=${API_KEY}` +
+          `&part=${typeOfDetails}` +
+          `&id=${videoId}`
+      );
+      const data = await response.json();
+      console.log(data.items[0].statistics.viewCount);
+      return data.items[0].statistics.viewCount;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  
+//   typeOfDetails =>"contentDetails" => duration
+// typeOfDetails => "statistics" => viewCount
+
+// fetchVideoStats('YphL3Whh5B0','contentDetails');
+// fetchVideoStats('YphL3Whh5B0','statistics');
 
 // searchBtn.addEventListener('click', ()=>{
 //     console.log('click',searchInput.value);
 //     fetchVideos(searchInput.value,50);
 // })
 
-// function work(){
-//     console.log('click',searchInput.value);
-//     fetchVideos(searchInput.value,50);
-// }
+function work(){
+    console.log('click',searchInput.value);
+    videoConatiner.innerHTML="";
+    fetchVideos(searchInput.value,50);
+}
+
+
+// ------------------------comments fetch---------------
+
+async function getComments(videoId,maxResults) {
+    try {
+      const response = await fetch(
+        BASE_URL +
+          "/commentThreads" +
+          `?key=${API_KEY}` +
+          `&videoId=${videoId}` +
+          `&maxResults=${maxResults}&part=snippet`
+      );
+      const data = await response.json();
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  
+  //getComments('8b0ubLO2MUE',10);
+
+
+
+//   snippet
+// : 
+// canReply
+// : 
+// true
+// channelId
+// : 
+// "UCt2JXOLNxqry7B_4rRZME3Q"
+// isPublic
+// : 
+// true
+// topLevelComment
+// : 
+// etag
+// : 
+// "v48cBmcPG-jceMruEnU1JteNpzU"
+// id
+// : 
+// "UgxSU46r7yBRbsYXBLR4AaABAg"
+// kind
+// : 
+// "youtube#comment"
+// snippet
+// : 
+// {channelId: 'UCt2JXOLNxqry7B_4rRZME3Q', videoId: '8b0ubLO2MUE', textDisplay: '<a href="https://www.youtube.com/watch?v=BYPMlcFmR…ps://youtu.be/BYPMlcFmRGI?si=rEDdx_UBuApPhT41</a>', textOriginal: 'https://youtu.be/BYPMlcFmRGI?si=rEDdx_UBuApPhT41', authorDisplayName: '@CricketStars331', …}
+// [[Prototype]]
+// : 
+// Object
+// totalReplyCount
+// : 
+// 0
+// videoId
+// : 
+// "8b0ubLO2MUE"
 
