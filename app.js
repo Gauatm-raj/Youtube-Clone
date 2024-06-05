@@ -5,10 +5,10 @@ const searchInput=document.querySelector(".search-bar");
 const searchBtn = document.querySelector(".serarch-btn");
 
 const  videoConatiner=document.querySelector(".list-container");
-const  videoConatiner1=document.querySelector(".list-container1")
 
 
-const API_KEY = "AIzaSyD4Hv7gZbNHjs0xfaewYsxPniXDXDbNecM";
+
+const API_KEY = "AIzaSyByF5XWz_pKOxsO4NlK8VgT6bGU27uRVew";
 
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
 const channelList="https://www.googleapis.com/youtube/v3/channels?";
@@ -64,12 +64,12 @@ const makeVideoCard = (data)=>{
         console.log(duration);
         videoConatiner.innerHTML +=`
        <div class="vid-list" >
-       <a href="play.html"><img src="${data.snippet.thumbnails.high.url}" class="thumbnail" alt=""></a>
+       <a href="play.html?videoId=${data.id.videoId}"><img src="${data.snippet.thumbnails.high.url}" class="thumbnail" alt=""></a>
     
     <div class="flex-div">
         <img src="${data.channelThumbnail}" alt="">
         <div class="vid-info">
-            <a href="play.html">${data.snippet.title}</a>
+            <a href="play.html?videoId=${data.id.videoId}">${data.snippet.title}</a>
             <p>${data.snippet.channelTitle}</p>
             <p> ${duration} Views</p>
             </div>
@@ -118,21 +118,7 @@ function work(){
 
 // ------------------------comments fetch---------------
 
-async function getComments(videoId,maxResults) {
-    try {
-      const response = await fetch(
-        BASE_URL +
-          "/commentThreads" +
-          `?key=${API_KEY}` +
-          `&videoId=${videoId}` +
-          `&maxResults=${maxResults}&part=snippet`
-      );
-      const data = await response.json();
-      console.log(data);
-    } catch (e) {
-      console.log(e);
-    }
-  }
+
   
   //getComments('8b0ubLO2MUE',10);
 
