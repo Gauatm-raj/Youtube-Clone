@@ -8,7 +8,7 @@ const  videoConatiner=document.querySelector(".list-container");
 
 
 
-const API_KEY = "AIzaSyByF5XWz_pKOxsO4NlK8VgT6bGU27uRVew";
+const API_KEY = "AIzaSyCGbIA4g2XOwBxshP1ZB40psGe6jjQObNI";
 
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
 const channelList="https://www.googleapis.com/youtube/v3/channels?";
